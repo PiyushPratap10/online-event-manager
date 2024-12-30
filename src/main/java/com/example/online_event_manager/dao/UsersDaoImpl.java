@@ -4,9 +4,11 @@ import com.example.online_event_manager.entity.Users;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class UsersDaoImpl implements UsersDao{
 
     private final EntityManager entityManager;
