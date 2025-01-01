@@ -3,7 +3,6 @@ package com.example.online_event_manager.dao;
 import com.example.online_event_manager.entity.Events;
 import com.example.online_event_manager.entity.Users;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -41,12 +40,20 @@ public class EventsDaoImpl implements EventsDao{
     }
 
     @Override
-    public void updateEvent(Events event) {
+    public void updateEvent(Events event,int adminId) {
+        Users user=entityManager.find(Users.class,adminId);
+        if(user==null || !user.getRole().equalsIgnoreCase("ADMIN")){
+            throw new IllegalArgumentException("Only ADMIN users can update events.");
+        }
         entityManager.merge(event);
     }
 
     @Override
-    public void deleteEvent(int eventId) {
+    public void deleteEvent(int eventId,int adminId) {
+        Users user=entityManager.find(Users.class,adminId);
+        if(user==null || !user.getRole().equalsIgnoreCase("ADMIN")){
+            throw new IllegalArgumentException("Only ADMIN users can  events.");
+        }
         Events event=entityManager.find(Events.class,eventId);
         if(event != null){
             entityManager.remove(event);
